@@ -9,8 +9,9 @@ public class GameSystemManager : MonoBehaviour
     GameObject inputFieldUserName, inputFieldPassword, buttonSubmit, toggleLogin, toggleCreate;
     GameObject networkedClient;
     GameObject findGameSessionButton, placeHolderGameButton;
-    GameObject infoText1, infoText2;
-    
+    GameObject messageDisplay;
+    GameObject TicTacToe;
+
     void Start()
     {
         GameObject[] allObjs = FindObjectsOfType<GameObject>();
@@ -33,10 +34,10 @@ public class GameSystemManager : MonoBehaviour
                 findGameSessionButton = go;
             else if (go.name == "PlaceHolderGameButton")
                 placeHolderGameButton = go;
-            else if (go.name == "InfoText1")
-                infoText1 = go;
-            else if (go.name == "InfoText2")
-                infoText2 = go;
+            else if (go.name == "TicTacToe")
+                TicTacToe = go;
+            else if (go.name == "MessageDisplay")
+                messageDisplay = go;
         }
         
         buttonSubmit.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed); 
@@ -51,25 +52,7 @@ public class GameSystemManager : MonoBehaviour
     
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.A))
-        // {
-        //     ChangeGameStates(GameStates.login);
-        // }
-        //
-        // if (Input.GetKeyDown(KeyCode.S))
-        // {
-        //     ChangeGameStates(GameStates.MainMenu);
-        // }
-        //
-        // if (Input.GetKeyDown(KeyCode.D))
-        // {
-        //     ChangeGameStates(GameStates.WaitingForMatch);
-        // }
-        //
-        // if (Input.GetKeyDown(KeyCode.F))
-        // {
-        //     ChangeGameStates(GameStates.PlayingTicTacToe);
-        // }
+        
     }
 
     private void SubmitButtonPressed()
@@ -115,8 +98,7 @@ public class GameSystemManager : MonoBehaviour
         toggleCreate.SetActive(false);
         findGameSessionButton.SetActive(false);
         placeHolderGameButton.SetActive(false);
-        infoText1.SetActive(false);
-        infoText2.SetActive(false);
+        
 
         if (newState == GameStates.login)
         {
@@ -125,8 +107,6 @@ public class GameSystemManager : MonoBehaviour
             buttonSubmit.SetActive(true);
             toggleLogin.SetActive(true);
             toggleCreate.SetActive(true);
-            infoText1.SetActive(true);
-            infoText2.SetActive(false);
         }
         else if (newState == GameStates.MainMenu)
         {
@@ -143,17 +123,30 @@ public class GameSystemManager : MonoBehaviour
        
     }
 
+    public void DisplayReceivedMessage(string message)
+    {
+        messageDisplay.GetComponent<Text>().text = message;
+    }
+
     public static class ClientToServerSignifiers
     {
         public const int Login = 1;
         public const int CreateAccount = 2;
         public const int AddToGameSessionQueue = 3;
         public const int TicTacToePlay = 4;
+        public const int playerAction = 3;
+        public const int playerWin = 4;
+        public const int isDraw = 5;
+        public const int sendMessage = 6;
     }
 
     public static class ServerToClientSignifiers
     {
         public const int LoginResponse = 1;
+        public const int displayMessage = 2;
+        public const int GameSessionStarted = 3;
+        public const int OpponentTicTacToePlay = 4;
+        public const int DisplayReceivedMsg = 5;
     }
  
     public static class LoginResponses

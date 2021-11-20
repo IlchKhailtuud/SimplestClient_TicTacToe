@@ -131,6 +131,10 @@ public class NetworkedClient : MonoBehaviour
         {
             Debug.Log("Our next action no longer beckons");
         }
+        else if (signifier == ServerToClientSignifiers.displayMessage)
+        {
+            gameManager.GetComponent<GameSystemManager>().DisplayReceivedMessage(csv[1]);
+        }
     }
 
     public bool IsConnected()
@@ -142,17 +146,20 @@ public class NetworkedClient : MonoBehaviour
     {
         public const int Login = 1;
         public const int CreateAccount = 2;
+        public const int AddToGameSessionQueue = 3;
+        public const int TicTacToePlay = 4;
         public const int playerAction = 3;
         public const int playerWin = 4;
         public const int isDraw = 5;
-        public const int sendPresetMsg = 6;
+        public const int sendMessage = 6;
     }
 
     public static class ServerToClientSignifiers
     {
         public const int LoginResponse = 1;
-        public const int GameSessionStarted = 2;
-        public const int OpponentTicTacToePlay = 3;
+        public const int displayMessage = 2;
+        public const int GameSessionStarted = 3;
+        public const int OpponentTicTacToePlay = 4;
     }
  
     public static class LoginResponses
