@@ -16,35 +16,16 @@ public class NetworkedClient : MonoBehaviour
     bool isConnected = false;
     int ourClientID;
 
-    GameObject gameManager;
-    private GameObject TicTacToeManager;
+    [SerializeField]GameObject gameManager;
+    [SerializeField]GameObject TicTacToeManager;
     
     void Start()
     {
-        GameObject[] allObjects1 = FindObjectsOfType<GameObject>();
-
-        foreach (GameObject go in allObjects1)
-        {
-            if (go.name == "GameManager")
-                gameManager = go;
-        }
-        
-        GameObject[] allObjects2 = FindObjectsOfType<GameObject>();
-        
-        foreach (GameObject go in allObjects1)
-        {
-            if (go.name == "GameManager")
-                TicTacToeManager = go;
-        }
-        
         Connect();
     }
     
     void Update()
     {
-        // if(Input.GetKeyDown(KeyCode.S))
-        //     SendMessageToHost("Hello from client");
-        
         UpdateNetworkConnection();
     }
 
@@ -135,18 +116,17 @@ public class NetworkedClient : MonoBehaviour
         else if (signifier == ServerToClientSignifiers.GameSessionStarted)
         {
             gameManager.GetComponent<GameSystemManager>().ChangeGameStates(GameSystemManager.GameStates.PlayingTicTacToe);
-
-            TicTacToeManager.GetComponent<ChessBoardManager>().PlayerID = int.Parse(csv[1]);
             
-            if (int.Parse(csv[1]) == 0)
-            {
-                TicTacToeManager.GetComponent<ChessBoardManager>().CanPlay = true;
-            }
+            TicTacToeManager.GetComponent<ChessBoardManager>().playerID = int.Parse(csv[1]);
+
+            TicTacToeManager.GetComponent<ChessBoardManager>().chessMark = int.Parse(csv[2]);
+            
+            if (int.Parse(csv[3]) == 1)
+                TicTacToeManager.GetComponent<ChessBoardManager>().canPlay = true;
         }
         else if (signifier == ServerToClientSignifiers.OpponentTicTacToePlay)
         {
-            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]));
-            
+            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]));
         }
         else if (signifier == ServerToClientSignifiers.displayMessage)
         {

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class ChessBoardManager : MonoBehaviour
 {
+    public static ChessBoardManager instance;
+    
     private int[] chessbordPos;
 
     public int[] ChessbordPos
@@ -17,24 +19,23 @@ public class ChessBoardManager : MonoBehaviour
     [SerializeField]
     private Button[] buttonArr;
 
+    public int chessMark;
     private int chessPlaced;
-    private int playerID;
+    public int playerID;
+    public bool canPlay;
 
-    public int PlayerID
-    {
-        get => playerID;
-        set => playerID = value;
-    }
-
-    private bool canPlay;
-
-    public bool CanPlay
-    {
-        get => canPlay;
-        set => canPlay = value;
-    }
+    // public bool CanPlay
+    // {
+    //     get => canPlay;
+    //     set => canPlay = value;
+    // }
     
     private NetworkedClient networkedClient;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void OnEnable()
     {
@@ -48,35 +49,51 @@ public class ChessBoardManager : MonoBehaviour
         canPlay = true;
     }
 
-    void Update()
+    private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OpponentPlaceChess(3);
+        }
     }
 
-    public void PlayerPlaceChess(int index, int playerID)
+    public void PlayerPlaceChess(int index)
     {
+        Debug.Log("chess placed" + canPlay);
         chessbordPos[index] = playerID;
         chessPlaced++;
         
-        networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerAction + "," + index + "," + playerID);
-            
-        canPlay = false;
+        networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerAction + "," + index);
+
+        canPlay = false; 
 
         if (isWin())
         {
-            networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerWin + "," + playerID);
+            //networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerWin + "," + playerID);
         }
         else if (isDraw())
         {
-            networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.isDraw + "");
+            //networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.isDraw + "");
         }
     }
 
-    public void OpponentPlaceChess(int index, int opponentID)
+    public void OpponentPlaceChess(int index)
     {
-        buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(opponentID);
-        
+        //Debug.Log("Opponent chess placed");
+
+        if (chessMark == 1)
+        {
+            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(chessMark + 1);
+        }
+        else if (chessMark == 2)
+        {
+            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(chessMark - 1);
+        }
+
         chessPlaced++;
-        canPlay = true; 
+        canPlay = true;
+        
+        Debug.Log("Opponent chess placed:" + canPlay);
     }
 
     public bool isWin()

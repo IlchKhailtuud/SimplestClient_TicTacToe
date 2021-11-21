@@ -9,35 +9,40 @@ public class ButtonBehaviour : MonoBehaviour
     [SerializeField] Sprite oSprite;
     [SerializeField] int posIndex;
     
-    private ChessBoardManager manager;
     private Button button;
-    
+    private int buttonChessMark;
     void Start()
     {
-        manager = FindObjectOfType<ChessBoardManager>();
         button = GetComponent<Button>();
         button.onClick.AddListener(OnButtonClicked);
     }
 
     public void OnButtonClicked()
     {
-        if (manager.CanPlay)
+        //Debug.Log("CanPlay: "+ manager.canPlay.ToString());
+        //Debug.Log("ChessMark: " + manager.GetComponent<ChessBoardManager>().chessMark);
+        
+        if (ChessBoardManager.instance.GetComponent<ChessBoardManager>().canPlay)
         {
             if (!CheckIfOccupied())
             {
-                ButtonUpdate(manager.PlayerID);
-                manager.PlayerPlaceChess(posIndex, manager.PlayerID);
+                ButtonUpdate(ChessBoardManager.instance.GetComponent<ChessBoardManager>().chessMark);
+                ChessBoardManager.instance.PlayerPlaceChess(posIndex);
             }
+        }
+        else
+        {
+            Debug.Log("cannot play play");
         }
     }
 
-    public void ButtonUpdate(int playerID)
+    public void ButtonUpdate(int chessMark)
     {
-        if (playerID == 1)
+        if (chessMark == 1)
         {
             button.GetComponent<Image>().sprite = oSprite;
         }
-        else if (playerID == 2)
+        else if (chessMark == 2)
         {
             button.GetComponent<Image>().sprite = xSprite;
         }
@@ -47,7 +52,7 @@ public class ButtonBehaviour : MonoBehaviour
 
     bool CheckIfOccupied()
     {
-        if (manager.ChessbordPos[posIndex] >= 1)
+        if (ChessBoardManager.instance.ChessbordPos[posIndex] >= 1)
             return true;
         else
             return false;
