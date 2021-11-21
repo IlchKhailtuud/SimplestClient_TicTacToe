@@ -98,7 +98,8 @@ public class GameSystemManager : MonoBehaviour
         toggleCreate.SetActive(false);
         findGameSessionButton.SetActive(false);
         placeHolderGameButton.SetActive(false);
-        
+        TicTacToe.SetActive(false);
+        messageDisplay.SetActive(false);
 
         if (newState == GameStates.login)
         {
@@ -118,7 +119,8 @@ public class GameSystemManager : MonoBehaviour
         }
         else if (newState == GameStates.PlayingTicTacToe)
         {
-            placeHolderGameButton.SetActive(true);
+            //placeHolderGameButton.SetActive(true);
+            TicTacToe.SetActive(true);
         }
        
     }
@@ -143,10 +145,9 @@ public class GameSystemManager : MonoBehaviour
     public static class ServerToClientSignifiers
     {
         public const int LoginResponse = 1;
-        public const int displayMessage = 2;
-        public const int GameSessionStarted = 3;
-        public const int OpponentTicTacToePlay = 4;
-        public const int DisplayReceivedMsg = 5;
+        public const int GameSessionStarted = 2;
+        public const int OpponentTicTacToePlay = 3;
+        public const int DisplayReceivedMsg = 4;
     }
  
     public static class LoginResponses

@@ -17,15 +17,24 @@ public class NetworkedClient : MonoBehaviour
     int ourClientID;
 
     GameObject gameManager;
+    private GameObject TicTacToeManager;
     
     void Start()
     {
-        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+        GameObject[] allObjects1 = FindObjectsOfType<GameObject>();
 
-        foreach (var go in allObjects)
+        foreach (var go in allObjects1)
         {
             if (go.name == "GameManager")
                 gameManager = go;
+        }
+        
+        GameObject[] allObjects2 = FindObjectsOfType<GameObject>();
+        
+        foreach (var go in allObjects1)
+        {
+            if (go.name == "GameManager")
+                TicTacToeManager = go;
         }
         
         Connect();
@@ -126,10 +135,17 @@ public class NetworkedClient : MonoBehaviour
         else if (signifier == ServerToClientSignifiers.GameSessionStarted)
         {
             gameManager.GetComponent<GameSystemManager>().ChangeGameStates(GameSystemManager.GameStates.PlayingTicTacToe);
+
+            TicTacToeManager.GetComponent<ChessBoardManager>().PlayerID = int.Parse(csv[1]);
+            
+            if (int.Parse(csv[1]) == 0)
+            {
+                TicTacToeManager.GetComponent<ChessBoardManager>().CanPlay = true;
+            }
         }
         else if (signifier == ServerToClientSignifiers.OpponentTicTacToePlay)
         {
-            Debug.Log("Our next action no longer beckons");
+            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]));
         }
         else if (signifier == ServerToClientSignifiers.displayMessage)
         {
@@ -148,18 +164,19 @@ public class NetworkedClient : MonoBehaviour
         public const int CreateAccount = 2;
         public const int AddToGameSessionQueue = 3;
         public const int TicTacToePlay = 4;
-        public const int playerAction = 3;
-        public const int playerWin = 4;
-        public const int isDraw = 5;
-        public const int sendMessage = 6;
+        public const int playerAction = 5;
+        public const int playerWin = 6;
+        public const int isDraw = 7;
+        public const int sendMessage = 8;
     }
 
     public static class ServerToClientSignifiers
     {
         public const int LoginResponse = 1;
-        public const int displayMessage = 2;
-        public const int GameSessionStarted = 3;
-        public const int OpponentTicTacToePlay = 4;
+        public const int GameSessionStarted = 2;
+        public const int OpponentTicTacToePlay = 3;
+        public const int displayMessage = 4;
+        public const int DecideTurnOrder = 5;
     }
  
     public static class LoginResponses

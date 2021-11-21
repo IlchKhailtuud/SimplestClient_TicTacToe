@@ -77,7 +77,7 @@ public class ChessBoardManager : MonoBehaviour
         buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(opponentID);
         
         chessPlaced++;
-        canPlay = true;
+        canPlay = true; 
     }
 
     public bool isWin()
