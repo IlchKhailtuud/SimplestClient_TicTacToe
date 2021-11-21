@@ -46,7 +46,6 @@ public class ChessBoardManager : MonoBehaviour
         chessbordPos = new int [9];
         chessPlaced = 0;
         canPlay = true;
-        playerID = 1;
     }
 
     void Update()

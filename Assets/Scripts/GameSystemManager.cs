@@ -8,15 +8,15 @@ public class GameSystemManager : MonoBehaviour
 {
     GameObject inputFieldUserName, inputFieldPassword, buttonSubmit, toggleLogin, toggleCreate;
     GameObject networkedClient;
-    GameObject findGameSessionButton, placeHolderGameButton;
-    GameObject messageDisplay;
-    GameObject TicTacToe;
+    GameObject findGameSessionButton;
+    [SerializeField]GameObject messageDisplay;
+    [SerializeField]GameObject TicTacToe;
 
     void Start()
     {
         GameObject[] allObjs = FindObjectsOfType<GameObject>();
-
-        foreach (var go in allObjs)
+        
+        foreach (GameObject go in allObjs)
         {
             if (go.name == "inputFieldUserName")
                 inputFieldUserName = go;
@@ -32,29 +32,16 @@ public class GameSystemManager : MonoBehaviour
                 networkedClient = go;
             else if (go.name == "FindGameSessionButton")
                 findGameSessionButton = go;
-            else if (go.name == "PlaceHolderGameButton")
-                placeHolderGameButton = go;
-            else if (go.name == "TicTacToe")
-                TicTacToe = go;
-            else if (go.name == "MessageDisplay")
-                messageDisplay = go;
         }
         
         buttonSubmit.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed); 
         toggleCreate.GetComponent<Toggle>().onValueChanged.AddListener(ToggleCreateValueChanged);
         toggleLogin.GetComponent<Toggle>().onValueChanged.AddListener(ToggleLoginValueChanged);
         
-        findGameSessionButton.GetComponent<Button>().onClick.AddListener(FindGameSessionButtonPressed); 
-        placeHolderGameButton.GetComponent<Button>().onClick.AddListener(PlaceHolderGameButtonPressed); 
-        
+        findGameSessionButton.GetComponent<Button>().onClick.AddListener(FindGameSessionButtonPressed);
         ChangeGameStates(GameStates.login);
     }
     
-    void Update()
-    {
-        
-    }
-
     private void SubmitButtonPressed()
     {
         string n = inputFieldUserName.GetComponent<InputField>().text;
@@ -84,11 +71,6 @@ public class GameSystemManager : MonoBehaviour
         ChangeGameStates(GameStates.WaitingForMatch);
     }
     
-    private void PlaceHolderGameButtonPressed()
-    {
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "");
-    }
-
     public void ChangeGameStates(int newState)
     {
         inputFieldUserName.SetActive(false);
@@ -97,7 +79,6 @@ public class GameSystemManager : MonoBehaviour
         toggleLogin.SetActive(false);
         toggleCreate.SetActive(false);
         findGameSessionButton.SetActive(false);
-        placeHolderGameButton.SetActive(false);
         TicTacToe.SetActive(false);
         messageDisplay.SetActive(false);
 
@@ -119,10 +100,9 @@ public class GameSystemManager : MonoBehaviour
         }
         else if (newState == GameStates.PlayingTicTacToe)
         {
-            //placeHolderGameButton.SetActive(true);
             TicTacToe.SetActive(true);
+            messageDisplay.SetActive(true);
         }
-       
     }
 
     public void DisplayReceivedMessage(string message)

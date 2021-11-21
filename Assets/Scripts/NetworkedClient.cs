@@ -23,7 +23,7 @@ public class NetworkedClient : MonoBehaviour
     {
         GameObject[] allObjects1 = FindObjectsOfType<GameObject>();
 
-        foreach (var go in allObjects1)
+        foreach (GameObject go in allObjects1)
         {
             if (go.name == "GameManager")
                 gameManager = go;
@@ -31,7 +31,7 @@ public class NetworkedClient : MonoBehaviour
         
         GameObject[] allObjects2 = FindObjectsOfType<GameObject>();
         
-        foreach (var go in allObjects1)
+        foreach (GameObject go in allObjects1)
         {
             if (go.name == "GameManager")
                 TicTacToeManager = go;
@@ -146,6 +146,7 @@ public class NetworkedClient : MonoBehaviour
         else if (signifier == ServerToClientSignifiers.OpponentTicTacToePlay)
         {
             TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]));
+            
         }
         else if (signifier == ServerToClientSignifiers.displayMessage)
         {

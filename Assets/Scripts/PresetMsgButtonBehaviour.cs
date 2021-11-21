@@ -7,14 +7,13 @@ using UnityEngine.UI;
 public class PresetMsgButtonBehaviour : MonoBehaviour
 {
     [SerializeField] private string message;
-    private Button button;
+    [SerializeField] private Button button;
     private NetworkedClient networkedClient;
 
     private void Start()
     {
-        button = GetComponent<Button>();
+        button.GetComponent<Button>().onClick.AddListener(SendMessage);
         networkedClient = FindObjectOfType<NetworkedClient>();
-        
     }
 
     public void SendMessage()
