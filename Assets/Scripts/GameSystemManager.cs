@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameSystemManager : MonoBehaviour
 {
-    GameObject inputFieldUserName, inputFieldPassword, buttonSubmit, toggleLogin, toggleCreate;
+    GameObject inputFieldUserName, inputFieldPassword, buttonSubmit, toggleLogin, toggleCreate, spectatorJoin;
     GameObject networkedClient;
     GameObject findGameSessionButton;
     [SerializeField]GameObject messageDisplay;
@@ -32,13 +32,16 @@ public class GameSystemManager : MonoBehaviour
                 networkedClient = go;
             else if (go.name == "FindGameSessionButton")
                 findGameSessionButton = go;
+            else if (go.name == "SpectatorJoin")
+                spectatorJoin = go;
         }
         
         buttonSubmit.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed); 
         toggleCreate.GetComponent<Toggle>().onValueChanged.AddListener(ToggleCreateValueChanged);
         toggleLogin.GetComponent<Toggle>().onValueChanged.AddListener(ToggleLoginValueChanged);
-        
         findGameSessionButton.GetComponent<Button>().onClick.AddListener(FindGameSessionButtonPressed);
+        spectatorJoin.GetComponent<Button>().onClick.AddListener(SpectatorJoinButtonPressed);
+        
         ChangeGameStates(GameStates.login);
     }
     
@@ -70,6 +73,11 @@ public class GameSystemManager : MonoBehaviour
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AddToGameSessionQueue + "");
         ChangeGameStates(GameStates.WaitingForMatch);
     }
+
+    private void SpectatorJoinButtonPressed()
+    {
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.watchGame + "");
+    }
     
     public void ChangeGameStates(int newState)
     {
@@ -81,6 +89,7 @@ public class GameSystemManager : MonoBehaviour
         findGameSessionButton.SetActive(false);
         TicTacToe.SetActive(false);
         messageDisplay.SetActive(false);
+        spectatorJoin.SetActive(false);
 
         if (newState == GameStates.login)
         {
@@ -89,6 +98,7 @@ public class GameSystemManager : MonoBehaviour
             buttonSubmit.SetActive(true);
             toggleLogin.SetActive(true);
             toggleCreate.SetActive(true);
+            spectatorJoin.SetActive(true);
         }
         else if (newState == GameStates.MainMenu)
         {
@@ -116,10 +126,11 @@ public class GameSystemManager : MonoBehaviour
         public const int CreateAccount = 2;
         public const int AddToGameSessionQueue = 3;
         public const int TicTacToePlay = 4;
-        public const int playerAction = 3;
-        public const int playerWin = 4;
-        public const int isDraw = 5;
-        public const int sendMessage = 6;
+        public const int playerAction = 5;
+        public const int playerWin = 6;
+        public const int isDraw = 7;
+        public const int sendMessage = 8;
+        public const int watchGame = 9;
     }
 
     public static class ServerToClientSignifiers
@@ -128,6 +139,8 @@ public class GameSystemManager : MonoBehaviour
         public const int GameSessionStarted = 2;
         public const int OpponentTicTacToePlay = 3;
         public const int DisplayReceivedMsg = 4;
+        public const int DecideTurnOrder = 5;
+        public const int spectatorJoin = 6;
     }
  
     public static class LoginResponses

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class ChessBoardManager : MonoBehaviour
 {
     public static ChessBoardManager instance;
-    
+
     private int[] chessbordPos;
 
     public int[] ChessbordPos
@@ -16,8 +16,7 @@ public class ChessBoardManager : MonoBehaviour
         get => chessbordPos;
     }
 
-    [SerializeField]
-    private Button[] buttonArr;
+    [SerializeField] private Button[] buttonArr;
 
     public int chessMark;
     private int chessPlaced;
@@ -29,7 +28,7 @@ public class ChessBoardManager : MonoBehaviour
     //     get => canPlay;
     //     set => canPlay = value;
     // }
-    
+
     private NetworkedClient networkedClient;
 
     private void Awake()
@@ -46,7 +45,6 @@ public class ChessBoardManager : MonoBehaviour
     {
         chessbordPos = new int [9];
         chessPlaced = 0;
-        canPlay = true;
     }
 
     private void Update()
@@ -59,28 +57,26 @@ public class ChessBoardManager : MonoBehaviour
 
     public void PlayerPlaceChess(int index)
     {
-        Debug.Log("chess placed" + canPlay);
         chessbordPos[index] = playerID;
         chessPlaced++;
-        
+
         networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerAction + "," + index);
 
-        canPlay = false; 
+        canPlay = false;
 
         if (isWin())
         {
             //networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerWin + "," + playerID);
         }
-        else if (isDraw())
+        else if (chessPlaced >= 9)
         {
+            Debug.Log("Drawwwwwwww!");
             //networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.isDraw + "");
         }
     }
 
     public void OpponentPlaceChess(int index)
     {
-        //Debug.Log("Opponent chess placed");
-
         if (chessMark == 1)
         {
             buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(chessMark + 1);
@@ -92,8 +88,6 @@ public class ChessBoardManager : MonoBehaviour
 
         chessPlaced++;
         canPlay = true;
-        
-        Debug.Log("Opponent chess placed:" + canPlay);
     }
 
     public bool isWin()
@@ -115,12 +109,5 @@ public class ChessBoardManager : MonoBehaviour
             return false;
         }
     }
-
-    public bool isDraw()
-    {
-        if (chessPlaced >= 9)
-            return true;
-        else
-            return false;
-    }
 }
+

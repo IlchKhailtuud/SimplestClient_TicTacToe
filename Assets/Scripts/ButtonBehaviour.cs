@@ -30,10 +30,6 @@ public class ButtonBehaviour : MonoBehaviour
                 ChessBoardManager.instance.PlayerPlaceChess(posIndex);
             }
         }
-        else
-        {
-            Debug.Log("cannot play play");
-        }
     }
 
     public void ButtonUpdate(int chessMark)

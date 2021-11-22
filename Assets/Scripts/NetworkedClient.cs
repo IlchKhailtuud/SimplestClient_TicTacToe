@@ -128,9 +128,13 @@ public class NetworkedClient : MonoBehaviour
         {
             TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]));
         }
-        else if (signifier == ServerToClientSignifiers.displayMessage)
+        else if (signifier == ServerToClientSignifiers.DisplayReceivedMsg)
         {
             gameManager.GetComponent<GameSystemManager>().DisplayReceivedMessage(csv[1]);
+        }
+        else if (signifier == ServerToClientSignifiers.spectatorJoin)
+        {
+            gameManager.GetComponent<GameSystemManager>().ChangeGameStates(GameStates.PlayingTicTacToe);
         }
     }
 
@@ -149,6 +153,8 @@ public class NetworkedClient : MonoBehaviour
         public const int playerWin = 6;
         public const int isDraw = 7;
         public const int sendMessage = 8;
+        public const int watchGame = 9;
+        
     }
 
     public static class ServerToClientSignifiers
@@ -156,8 +162,9 @@ public class NetworkedClient : MonoBehaviour
         public const int LoginResponse = 1;
         public const int GameSessionStarted = 2;
         public const int OpponentTicTacToePlay = 3;
-        public const int displayMessage = 4;
+        public const int DisplayReceivedMsg = 4;
         public const int DecideTurnOrder = 5;
+        public const int spectatorJoin = 6;
     }
  
     public static class LoginResponses
