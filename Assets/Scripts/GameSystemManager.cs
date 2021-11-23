@@ -141,6 +141,7 @@ public class GameSystemManager : MonoBehaviour
         public const int DisplayReceivedMsg = 4;
         public const int DecideTurnOrder = 5;
         public const int spectatorJoin = 6;
+        public const int updateSpectator = 7;
     }
  
     public static class LoginResponses

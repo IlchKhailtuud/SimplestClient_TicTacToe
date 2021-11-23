@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -126,7 +127,7 @@ public class NetworkedClient : MonoBehaviour
         }
         else if (signifier == ServerToClientSignifiers.OpponentTicTacToePlay)
         {
-            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]));
+            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]));
         }
         else if (signifier == ServerToClientSignifiers.DisplayReceivedMsg)
         {
@@ -141,11 +142,20 @@ public class NetworkedClient : MonoBehaviour
             }
             else if (updateSignifier == 1)
             {
-                int Pos = int.Parse(csv[2]);
+                int pos = int.Parse(csv[2]);
                 int mark = int.Parse(csv[3]);
-                
-                //TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]));
+
+                TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
+                    .Add(new ChessBoardManager.PlayerChess(mark, pos));
             }
+            else if (updateSignifier == 2)
+            {
+                TicTacToeManager.GetComponent<ChessBoardManager>().BulkUpdate();
+            }
+        }
+        else if (signifier == ServerToClientSignifiers.updateSpectator)
+        {
+            TicTacToeManager.GetComponent<ChessBoardManager>().SpectatorUpdate(int.Parse(csv[1]), int.Parse(csv[2]));
         }
     }
 
@@ -176,6 +186,7 @@ public class NetworkedClient : MonoBehaviour
         public const int DisplayReceivedMsg = 4;
         public const int DecideTurnOrder = 5;
         public const int spectatorJoin = 6;
+        public const int updateSpectator = 7;
     }
  
     public static class LoginResponses

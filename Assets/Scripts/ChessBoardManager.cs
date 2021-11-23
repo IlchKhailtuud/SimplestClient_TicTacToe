@@ -10,6 +10,7 @@ public class ChessBoardManager : MonoBehaviour
     public static ChessBoardManager instance;
 
     private int[] chessbordPos;
+    public List<PlayerChess> chesslist;
 
     public int[] ChessbordPos
     {
@@ -45,14 +46,12 @@ public class ChessBoardManager : MonoBehaviour
     {
         chessbordPos = new int [9];
         chessPlaced = 0;
+        chesslist = new List<PlayerChess>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            OpponentPlaceChess(3);
-        }
+        
     }
 
     public void PlayerPlaceChess(int index)
@@ -60,7 +59,7 @@ public class ChessBoardManager : MonoBehaviour
         chessbordPos[index] = playerID;
         chessPlaced++;
 
-        networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerAction + "," + index);
+        networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerAction + "," + index + "," + chessMark);
 
         canPlay = false;
 
@@ -75,19 +74,39 @@ public class ChessBoardManager : MonoBehaviour
         }
     }
 
-    public void OpponentPlaceChess(int index)
+    public void OpponentPlaceChess(int index, int mark)
     {
-        if (chessMark == 1)
+        if (mark == 1)
         {
-            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(chessMark + 1);
+            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(mark + 1);
         }
-        else if (chessMark == 2)
+        else if (mark == 2)
         {
-            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(chessMark - 1);
+            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(mark - 1);
         }
 
         chessPlaced++;
         canPlay = true;
+    }
+
+    public void SpectatorUpdate(int index, int mark)
+    {
+        if (mark == 1)
+        {
+            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(mark + 1);
+        }
+        else if (mark == 2)
+        {
+            buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(mark - 1);
+        }
+    }
+
+    public void BulkUpdate()
+    {
+        for (int i = 0; i < chesslist.Count; i++)
+        {
+            SpectatorUpdate(chesslist[i].chessPos, chesslist[i].chessMark);
+        }
     }
 
     public bool isWin()
@@ -107,6 +126,18 @@ public class ChessBoardManager : MonoBehaviour
         else
         {
             return false;
+        }
+    }
+    
+    public class PlayerChess
+    {
+        public int chessMark;
+        public int chessPos;
+
+        public PlayerChess(int chessMark, int chessPos)
+        {
+            this.chessMark = chessMark;
+            this.chessPos = chessPos;
         }
     }
 }
