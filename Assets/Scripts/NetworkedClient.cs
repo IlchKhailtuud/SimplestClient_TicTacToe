@@ -134,7 +134,18 @@ public class NetworkedClient : MonoBehaviour
         }
         else if (signifier == ServerToClientSignifiers.spectatorJoin)
         {
-            gameManager.GetComponent<GameSystemManager>().ChangeGameStates(GameStates.PlayingTicTacToe);
+            int updateSignifier = int.Parse(csv[1]);
+            if (updateSignifier == 0)
+            {
+                gameManager.GetComponent<GameSystemManager>().ChangeGameStates(GameStates.PlayingTicTacToe);
+            }
+            else if (updateSignifier == 1)
+            {
+                int Pos = int.Parse(csv[2]);
+                int mark = int.Parse(csv[3]);
+                
+                //TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]));
+            }
         }
     }
 
