@@ -65,20 +65,24 @@ public class ChessBoardManager : MonoBehaviour
         }
     }
 
-    public void OpponentPlaceChess(int index, int mark)
+    public void OpponentPlaceChess(int index, int mark, int playerid)
     {
         buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(mark);
-        
+        chessbordPos[index] = playerid;
         chessPlaced++;
         canPlay = true;
     }
     
+    public void UpdateSpectator(int index, int mark)
+    {
+        buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(mark);
+    }
+    
     public void BulkUpdate()
     {
-        Debug.Log("Bulk update");
         for (int i = 0; i < chesslist.Count; i++)
         {
-            OpponentPlaceChess(chesslist[i].chessPos, chesslist[i].chessMark);
+            UpdateSpectator(chesslist[i].chessPos, chesslist[i].chessMark);
         }
     }
 

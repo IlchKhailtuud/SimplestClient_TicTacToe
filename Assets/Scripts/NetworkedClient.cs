@@ -128,7 +128,7 @@ public class NetworkedClient : MonoBehaviour
         }
         else if (signifier == ServerToClientSignifiers.OpponentTicTacToePlay)
         {
-            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]));
+            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]));
         }
         else if (signifier == ServerToClientSignifiers.DisplayReceivedMsg)
         {
@@ -156,11 +156,11 @@ public class NetworkedClient : MonoBehaviour
         }
         else if (signifier == ServerToClientSignifiers.updateSpectator)
         {
-            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]));
+            TicTacToeManager.GetComponent<ChessBoardManager>().UpdateSpectator(int.Parse(csv[1]), int.Parse(csv[2]));
         }
         else if (signifier == ServerToClientSignifiers.announceWinner)
         {
-            gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = csv[1] + " wins!";
+            gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "Player" + csv[1] + " wins!";
             gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
         }
         else if (signifier == ServerToClientSignifiers.announceDraw)

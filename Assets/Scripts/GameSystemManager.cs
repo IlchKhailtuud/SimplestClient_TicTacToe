@@ -101,6 +101,7 @@ public class GameSystemManager : MonoBehaviour
         TicTacToe.SetActive(false);
         messageDisplay.SetActive(false);
         spectatorJoin.SetActive(false);
+        replayButton.SetActive(false);
 
         if (newState == GameStates.login)
         {
