@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -49,5 +50,10 @@ public class ButtonBehaviour : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public void ResetSprite()
+    {
+        button.GetComponent<Image>().sprite = null;
     }
 }

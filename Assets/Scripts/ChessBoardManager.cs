@@ -23,7 +23,10 @@ public class ChessBoardManager : MonoBehaviour
     private int chessPlaced;
     public int playerID;
     public bool canPlay;
-
+    public bool canReplay;
+    private float passedTime;
+    private float targetTime;
+    private int listIndex;
     private NetworkedClient networkedClient;
 
     private void Awake()
@@ -41,26 +44,40 @@ public class ChessBoardManager : MonoBehaviour
         chessbordPos = new int [9];
         chessPlaced = 0;
         chesslist = new List<PlayerChess>();
+        passedTime = 0.0f;
+        targetTime = 0.5f;
+        listIndex = 0;
     }
-    
+
+    private void Update()
+    {
+        if (canReplay && listIndex < chesslist.Count)
+        {
+            if (passedTime >= targetTime)
+            {
+                ChessVisualUpdate(chesslist[listIndex++].chessPos, chesslist[listIndex++].chessMark);
+                passedTime = 0f;
+            }
+
+            passedTime += Time.deltaTime;
+        }
+    }
+
     public void PlayerPlaceChess(int index)
     {
         chessbordPos[index] = playerID;
         chessPlaced++;
 
         networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerAction + "," + index + "," + chessMark);
-
+        
         canPlay = false;
 
         if (isWin())
         {
-            Debug.Log("Winnnnnnnn!");
-            
             networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerWin + "," + playerID);
         }
         else if (chessPlaced >= 9)
         {
-            Debug.Log("Drawwwwwwww!");
             networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.isDraw + "");
         }
     }
@@ -73,7 +90,7 @@ public class ChessBoardManager : MonoBehaviour
         canPlay = true;
     }
     
-    public void UpdateSpectator(int index, int mark)
+    public void ChessVisualUpdate(int index, int mark)
     {
         buttonArr[index].GetComponent<ButtonBehaviour>().ButtonUpdate(mark);
     }
@@ -82,7 +99,23 @@ public class ChessBoardManager : MonoBehaviour
     {
         for (int i = 0; i < chesslist.Count; i++)
         {
-            UpdateSpectator(chesslist[i].chessPos, chesslist[i].chessMark);
+            ChessVisualUpdate(chesslist[i].chessPos, chesslist[i].chessMark);
+        }
+    }
+
+    public void Replay()
+    {
+        foreach (PlayerChess pc in chesslist)
+        {
+            ChessVisualUpdate(pc.chessPos, pc.chessMark);
+        }
+    }
+
+    public void ResetAllButtons()
+    {
+        foreach (Button button in buttonArr)
+        {
+            button.GetComponent<ButtonBehaviour>().ResetSprite();
         }
     }
 

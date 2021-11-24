@@ -143,6 +143,7 @@ public class GameSystemManager : MonoBehaviour
         public const int isDraw = 7;
         public const int sendMessage = 8;
         public const int watchGame = 9;
+        public const int requestReplay = 10;
     }
 
     public static class ServerToClientSignifiers
@@ -156,6 +157,7 @@ public class GameSystemManager : MonoBehaviour
         public const int updateSpectator = 7;
         public const int announceWinner = 8;
         public const int announceDraw = 9;
+        public const int sendReplayChessList = 10;
     }
  
     public static class LoginResponses

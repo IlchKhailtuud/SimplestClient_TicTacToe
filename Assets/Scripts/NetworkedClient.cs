@@ -156,7 +156,7 @@ public class NetworkedClient : MonoBehaviour
         }
         else if (signifier == ServerToClientSignifiers.updateSpectator)
         {
-            TicTacToeManager.GetComponent<ChessBoardManager>().UpdateSpectator(int.Parse(csv[1]), int.Parse(csv[2]));
+            TicTacToeManager.GetComponent<ChessBoardManager>().ChessVisualUpdate(int.Parse(csv[1]), int.Parse(csv[2]));
         }
         else if (signifier == ServerToClientSignifiers.announceWinner)
         {
@@ -167,6 +167,33 @@ public class NetworkedClient : MonoBehaviour
         {
             gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "It's a tie!";
             gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
+        }
+        else if (signifier == ServerToClientSignifiers.sendReplayChessList)
+        {
+            int updateSignifier = int.Parse(csv[1]);
+
+            if (updateSignifier == 0)
+            {
+                Debug.Log("Clear chess list");
+                TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
+                    .Clear();
+            }
+
+            if (updateSignifier == 1)
+            {
+                int pos = int.Parse(csv[2]);
+                int mark = int.Parse(csv[3]);
+                
+                Debug.Log("receiving chess list");
+                TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
+                    .Add(new ChessBoardManager.PlayerChess(mark, pos));
+            }
+
+            if (updateSignifier == 2)
+            {
+                Debug.Log("replaying chess list");
+                TicTacToeManager.GetComponent<ChessBoardManager>().canReplay = true;
+            }
         }
     }
 
@@ -186,7 +213,7 @@ public class NetworkedClient : MonoBehaviour
         public const int isDraw = 7;
         public const int sendMessage = 8;
         public const int watchGame = 9;
-        
+        public const int requestReplay = 10;
     }
 
     public static class ServerToClientSignifiers
@@ -200,6 +227,7 @@ public class NetworkedClient : MonoBehaviour
         public const int updateSpectator = 7;
         public const int announceWinner = 8;
         public const int announceDraw = 9;
+        public const int sendReplayChessList = 10;
     }
  
     public static class LoginResponses
