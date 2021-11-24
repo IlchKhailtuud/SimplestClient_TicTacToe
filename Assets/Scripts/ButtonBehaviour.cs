@@ -19,9 +19,6 @@ public class ButtonBehaviour : MonoBehaviour
 
     public void OnButtonClicked()
     {
-        //Debug.Log("CanPlay: "+ manager.canPlay.ToString());
-        //Debug.Log("ChessMark: " + manager.GetComponent<ChessBoardManager>().chessMark);
-        
         if (ChessBoardManager.instance.GetComponent<ChessBoardManager>().canPlay)
         {
             if (!CheckIfOccupied())

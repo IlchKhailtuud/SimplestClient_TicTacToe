@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class NetworkedClient : MonoBehaviour
 {
@@ -155,7 +156,17 @@ public class NetworkedClient : MonoBehaviour
         }
         else if (signifier == ServerToClientSignifiers.updateSpectator)
         {
-            TicTacToeManager.GetComponent<ChessBoardManager>().SpectatorUpdate(int.Parse(csv[1]), int.Parse(csv[2]));
+            TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]));
+        }
+        else if (signifier == ServerToClientSignifiers.announceWinner)
+        {
+            gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = csv[1] + " wins!";
+            gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
+        }
+        else if (signifier == ServerToClientSignifiers.announceDraw)
+        {
+            gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "It's a tie!";
+            gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
         }
     }
 
@@ -187,6 +198,8 @@ public class NetworkedClient : MonoBehaviour
         public const int DecideTurnOrder = 5;
         public const int spectatorJoin = 6;
         public const int updateSpectator = 7;
+        public const int announceWinner = 8;
+        public const int announceDraw = 9;
     }
  
     public static class LoginResponses

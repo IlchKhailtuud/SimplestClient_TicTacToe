@@ -9,7 +9,8 @@ public class GameSystemManager : MonoBehaviour
     GameObject inputFieldUserName, inputFieldPassword, buttonSubmit, toggleLogin, toggleCreate, spectatorJoin;
     GameObject networkedClient;
     GameObject findGameSessionButton;
-    [SerializeField]GameObject messageDisplay;
+    public GameObject replayButton,  resultText;
+    [SerializeField] private GameObject messageDisplay;
     [SerializeField]GameObject TicTacToe;
 
     void Start()
@@ -34,6 +35,10 @@ public class GameSystemManager : MonoBehaviour
                 findGameSessionButton = go;
             else if (go.name == "SpectatorJoin")
                 spectatorJoin = go;
+            else if (go.name == "ReplayButton")
+                replayButton = go;
+            else if (go.name == "ResultText")
+                resultText = go; 
         }
         
         buttonSubmit.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed); 
@@ -41,7 +46,8 @@ public class GameSystemManager : MonoBehaviour
         toggleLogin.GetComponent<Toggle>().onValueChanged.AddListener(ToggleLoginValueChanged);
         findGameSessionButton.GetComponent<Button>().onClick.AddListener(FindGameSessionButtonPressed);
         spectatorJoin.GetComponent<Button>().onClick.AddListener(SpectatorJoinButtonPressed);
-        
+        replayButton.GetComponent<Button>().onClick.AddListener(ReplayButtonPressed);
+
         ChangeGameStates(GameStates.login);
     }
     
@@ -78,7 +84,12 @@ public class GameSystemManager : MonoBehaviour
     {
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.watchGame + "");
     }
-    
+
+    public void ReplayButtonPressed()
+    {
+        
+    }
+
     public void ChangeGameStates(int newState)
     {
         inputFieldUserName.SetActive(false);
@@ -142,6 +153,8 @@ public class GameSystemManager : MonoBehaviour
         public const int DecideTurnOrder = 5;
         public const int spectatorJoin = 6;
         public const int updateSpectator = 7;
+        public const int announceWinner = 8;
+        public const int announceDraw = 9;
     }
  
     public static class LoginResponses
