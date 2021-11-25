@@ -55,10 +55,11 @@ public class ChessBoardManager : MonoBehaviour
         {
             if (passedTime >= targetTime)
             {
-                ChessVisualUpdate(chesslist[listIndex++].chessPos, chesslist[listIndex++].chessMark);
+                ChessVisualUpdate(chesslist[listIndex].chessPos, chesslist[listIndex].chessMark);
+                
+                ++listIndex;
                 passedTime = 0f;
             }
-
             passedTime += Time.deltaTime;
         }
     }
@@ -102,15 +103,7 @@ public class ChessBoardManager : MonoBehaviour
             ChessVisualUpdate(chesslist[i].chessPos, chesslist[i].chessMark);
         }
     }
-
-    public void Replay()
-    {
-        foreach (PlayerChess pc in chesslist)
-        {
-            ChessVisualUpdate(pc.chessPos, pc.chessMark);
-        }
-    }
-
+    
     public void ResetAllButtons()
     {
         foreach (Button button in buttonArr)
@@ -138,13 +131,13 @@ public class ChessBoardManager : MonoBehaviour
             return false;
         }
     }
-    
+
     public class PlayerChess
     {
         public int chessMark;
         public int chessPos;
 
-        public PlayerChess(int chessMark, int chessPos)
+        public PlayerChess(int chessPos, int chessMark)
         {
             this.chessMark = chessMark;
             this.chessPos = chessPos;

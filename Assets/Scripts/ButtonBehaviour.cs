@@ -55,5 +55,6 @@ public class ButtonBehaviour : MonoBehaviour
     public void ResetSprite()
     {
         button.GetComponent<Image>().sprite = null;
+        button.interactable = false;
     }
 }

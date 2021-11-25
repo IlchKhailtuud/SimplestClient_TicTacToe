@@ -87,7 +87,7 @@ public class GameSystemManager : MonoBehaviour
 
     public void ReplayButtonPressed()
     {
-        
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.requestReplay + "");
     }
 
     public void ChangeGameStates(int newState)

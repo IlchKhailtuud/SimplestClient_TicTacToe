@@ -147,7 +147,7 @@ public class NetworkedClient : MonoBehaviour
                 int mark = int.Parse(csv[3]);
 
                 TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
-                    .Add(new ChessBoardManager.PlayerChess(mark, pos));
+                    .Add(new ChessBoardManager.PlayerChess(pos, mark));
             }
             else if (updateSignifier == 2)
             {
@@ -174,9 +174,8 @@ public class NetworkedClient : MonoBehaviour
 
             if (updateSignifier == 0)
             {
-                Debug.Log("Clear chess list");
-                TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
-                    .Clear();
+                TicTacToeManager.GetComponent<ChessBoardManager>().chesslist.Clear();
+                TicTacToeManager.GetComponent<ChessBoardManager>().ResetAllButtons();
             }
 
             if (updateSignifier == 1)
@@ -184,14 +183,13 @@ public class NetworkedClient : MonoBehaviour
                 int pos = int.Parse(csv[2]);
                 int mark = int.Parse(csv[3]);
                 
-                Debug.Log("receiving chess list");
                 TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
-                    .Add(new ChessBoardManager.PlayerChess(mark, pos));
+                    .Add(new ChessBoardManager.PlayerChess(pos, mark));
             }
-
+            
             if (updateSignifier == 2)
             {
-                Debug.Log("replaying chess list");
+                Debug.Log("List length " + TicTacToeManager.GetComponent<ChessBoardManager>().chesslist.Count);
                 TicTacToeManager.GetComponent<ChessBoardManager>().canReplay = true;
             }
         }
