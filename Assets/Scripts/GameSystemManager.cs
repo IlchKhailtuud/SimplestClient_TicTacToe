@@ -97,6 +97,7 @@ public class GameSystemManager : MonoBehaviour
     {
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.startNewSession + "");
         ChangeGameStates(GameStates.MainMenu);
+        messageDisplay.SetActive(false);
         //Application.Quit();
     }
 

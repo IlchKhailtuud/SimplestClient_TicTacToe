@@ -115,7 +115,7 @@ public class ChessBoardManager : MonoBehaviour
         }
         else if (chessPlaced >= 9)
         {
-            //if chessplaced is greater than 9 && the player doesn't win then send isDraw sigifier to server
+            //if chessplaced is greater than 9 && the player doesn't win then send isDraw signifier to server
             networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.isDraw + "");
         }
     }
