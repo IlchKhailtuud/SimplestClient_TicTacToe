@@ -9,6 +9,7 @@ public class ChessBoardManager : MonoBehaviour
 {
     public static ChessBoardManager instance;
     
+    //array for chessboard buttons
     [SerializeField] private Button[] buttonArr;
     
     //array for chess index
@@ -27,35 +28,41 @@ public class ChessBoardManager : MonoBehaviour
     private int listIndex;
     private NetworkedClient networkedClient;
     
+    //properties for chessbordPos
     public int[] ChessbordPos
     {
         get => chessbordArr;
     }
     
+    //properties for playerID
     public int PlayerID
     {
         get => playerID;
         set => playerID = value;
     }
 
+    //properties for chessMark
     public int ChessMark
     {
         get => chessMark;
         set => chessMark = value;
     }
 
+    //properties for chessPlaced
     public int ChessPlaced
     {
         get => chessPlaced;
         set => chessPlaced = value;
     }
 
+    //properties for canPlay
     public bool CanPlay
     {
         get => canPlay;
         set => canPlay = value;
     }
 
+    //properties for canReplay;
     public bool CanReplay
     {
         get => canReplay;

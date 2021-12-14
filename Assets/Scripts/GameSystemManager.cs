@@ -9,7 +9,7 @@ public class GameSystemManager : MonoBehaviour
     GameObject inputFieldUserName, inputFieldPassword, buttonSubmit, toggleLogin, toggleCreate, spectatorJoin;
     GameObject networkedClient;
     GameObject findGameSessionButton;
-    public GameObject replayButton,  resultText;
+    public GameObject replayButton,  resultText, exitButton;
     public GameObject messageDisplay;
     public GameObject TicTacToe;
 
@@ -39,6 +39,8 @@ public class GameSystemManager : MonoBehaviour
                 replayButton = go;
             else if (go.name == "ResultText")
                 resultText = go; 
+            else if (go.name == "ExitButton")
+                exitButton = go;
         }
         
         buttonSubmit.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed); 
@@ -47,6 +49,7 @@ public class GameSystemManager : MonoBehaviour
         findGameSessionButton.GetComponent<Button>().onClick.AddListener(FindGameSessionButtonPressed);
         spectatorJoin.GetComponent<Button>().onClick.AddListener(SpectatorJoinButtonPressed);
         replayButton.GetComponent<Button>().onClick.AddListener(ReplayButtonPressed);
+        exitButton.GetComponent<Button>().onClick.AddListener(ExitButtonPressed);
 
         ChangeGameStates(GameStates.login);
     }
@@ -90,6 +93,13 @@ public class GameSystemManager : MonoBehaviour
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.requestReplay + "");
     }
 
+    public void ExitButtonPressed()
+    {
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.startNewSession + "");
+        ChangeGameStates(GameStates.MainMenu);
+        //Application.Quit();
+    }
+
     public void ChangeGameStates(int newState)
     {
         inputFieldUserName.SetActive(false);
@@ -102,6 +112,7 @@ public class GameSystemManager : MonoBehaviour
         messageDisplay.SetActive(false);
         spectatorJoin.SetActive(false);
         replayButton.SetActive(false);
+        exitButton.SetActive(false);
 
         if (newState == GameStates.login)
         {
@@ -115,10 +126,6 @@ public class GameSystemManager : MonoBehaviour
         else if (newState == GameStates.MainMenu)
         {
             findGameSessionButton.SetActive(true);
-        }
-        else if (newState == GameStates.WaitingForMatch)
-        {
-            
         }
         else if (newState == GameStates.PlayingTicTacToe)
         {
@@ -144,6 +151,7 @@ public class GameSystemManager : MonoBehaviour
         public const int sendMessage = 8;
         public const int watchGame = 9;
         public const int requestReplay = 10;
+        public const int startNewSession = 11;
     }
     
     public static class GameStates

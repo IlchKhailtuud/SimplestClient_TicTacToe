@@ -168,6 +168,13 @@ public class NetworkedClient : MonoBehaviour
             gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "Player" + csv[1] + " wins!";
             //show replay button
             gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
+            //show quit button
+            gameManager.GetComponent<GameSystemManager>().exitButton.SetActive(true);
+        }
+        else if (signifier == ServerToClientSignifiers.announceWinnerForSpectator)
+        {
+            //update result UI text
+            gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "Player" + csv[1] + " wins!";
         }
         else if (signifier == ServerToClientSignifiers.announceDraw)
         {
@@ -175,6 +182,11 @@ public class NetworkedClient : MonoBehaviour
             gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "It's a tie!";
             //show replay button
             gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
+        }
+        else if (signifier == ServerToClientSignifiers.announceDrawForSpectator)
+        {
+            //update result UI text
+            gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "It's a tie!";
         }
         else if (signifier == ServerToClientSignifiers.sendReplayChessList)
         {
@@ -225,6 +237,7 @@ public class NetworkedClient : MonoBehaviour
         public const int sendMessage = 8;
         public const int watchGame = 9;
         public const int requestReplay = 10;
+        public const int startNewSession = 11;
     }
 
     public static class ServerToClientSignifiers
@@ -239,7 +252,9 @@ public class NetworkedClient : MonoBehaviour
         public const int announceWinner = 8;
         public const int announceDraw = 9;
         public const int sendReplayChessList = 10;
-    }
+        public const int announceWinnerForSpectator = 11;
+        public const int announceDrawForSpectator = 12;
+    } 
  
     public static class LoginResponses
     {
