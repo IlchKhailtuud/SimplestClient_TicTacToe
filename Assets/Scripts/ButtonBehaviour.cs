@@ -56,10 +56,16 @@ public class ButtonBehaviour : MonoBehaviour
             return false;
     }
     
-    //reset button image sprite
-    public void ResetSprite()
+    //reset button sprite 
+    public void ResetButtonInteractivity()
     {
         button.GetComponent<Image>().sprite = null;
         button.interactable = false;
+    }
+
+    public void ResetButtonSprite()
+    {
+        button.GetComponent<Image>().sprite = null;
+        button.interactable = true;
     }
 }

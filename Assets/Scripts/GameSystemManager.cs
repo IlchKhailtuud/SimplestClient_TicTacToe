@@ -97,7 +97,7 @@ public class GameSystemManager : MonoBehaviour
     {
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.startNewSession + "");
         ChangeGameStates(GameStates.MainMenu);
-        messageDisplay.SetActive(false);
+        ChessBoardManager.instance.Reset();
         //Application.Quit();
     }
 
@@ -111,6 +111,7 @@ public class GameSystemManager : MonoBehaviour
         findGameSessionButton.SetActive(false);
         TicTacToe.SetActive(false);
         messageDisplay.SetActive(false);
+        resultText.SetActive(false);
         spectatorJoin.SetActive(false);
         replayButton.SetActive(false);
         exitButton.SetActive(false);
@@ -132,6 +133,7 @@ public class GameSystemManager : MonoBehaviour
         {
             TicTacToe.SetActive(true);
             messageDisplay.SetActive(true);
+            resultText.SetActive(true);
         }
     }
 

@@ -197,7 +197,7 @@ public class NetworkedClient : MonoBehaviour
                 //remove all elements in the chess list
                 TicTacToeManager.GetComponent<ChessBoardManager>().chesslist.Clear();
                 //reset all buttons on chess board
-                TicTacToeManager.GetComponent<ChessBoardManager>().ResetAllButtons();
+                TicTacToeManager.GetComponent<ChessBoardManager>().ResetAllButtonSprite();
             }
             
             if (updateSignifier == 1)

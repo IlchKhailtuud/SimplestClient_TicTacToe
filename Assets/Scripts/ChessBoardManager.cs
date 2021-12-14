@@ -147,14 +147,30 @@ public class ChessBoardManager : MonoBehaviour
     }
     
     //reset button to original state
-    public void ResetAllButtons()
+    public void ResetAllButtonSprite()
     {
         foreach (Button button in buttonArr)
         {
-            button.GetComponent<ButtonBehaviour>().ResetSprite();
+            button.GetComponent<ButtonBehaviour>().ResetButtonInteractivity();
         }
     }
 
+    //reset button & chessboard for a new around
+    public void Reset()
+    {
+        foreach (Button button in buttonArr)
+        {
+            button.GetComponent<ButtonBehaviour>().ResetButtonSprite();
+        }
+
+        for (int i = 0; i < chessbordArr.Length; i++)
+        {
+            chessbordArr[i] = 0;
+        }
+        
+        chesslist.Clear();
+    }
+    
     //Replay both player moves from the start 
     private void Replay()
     {
