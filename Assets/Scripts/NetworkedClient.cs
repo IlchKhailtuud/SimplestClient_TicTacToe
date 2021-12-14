@@ -85,7 +85,6 @@ public class NetworkedClient : MonoBehaviour
                 isConnected = true;
 
                 Debug.Log("Connected, id = " + connectionID);
-
             }
         }
     }
@@ -119,15 +118,17 @@ public class NetworkedClient : MonoBehaviour
         {
             gameManager.GetComponent<GameSystemManager>().ChangeGameStates(GameSystemManager.GameStates.PlayingTicTacToe);
             
-            TicTacToeManager.GetComponent<ChessBoardManager>().playerID = int.Parse(csv[1]);
-
-            TicTacToeManager.GetComponent<ChessBoardManager>().chessMark = int.Parse(csv[2]);
+            //allocate playerID & chess mark for each player
+            TicTacToeManager.GetComponent<ChessBoardManager>().PlayerID = int.Parse(csv[1]);
+            TicTacToeManager.GetComponent<ChessBoardManager>().ChessMark = int.Parse(csv[2]);
             
+            //Decide which player goes first
             if (int.Parse(csv[3]) == 1)
-                TicTacToeManager.GetComponent<ChessBoardManager>().canPlay = true;
+                TicTacToeManager.GetComponent<ChessBoardManager>().CanPlay = true;
         }
         else if (signifier == ServerToClientSignifiers.OpponentTicTacToePlay)
         {
+            //send other player action 
             TicTacToeManager.GetComponent<ChessBoardManager>().OpponentPlaceChess(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]));
         }
         else if (signifier == ServerToClientSignifiers.DisplayReceivedMsg)
@@ -139,6 +140,7 @@ public class NetworkedClient : MonoBehaviour
             int updateSignifier = int.Parse(csv[1]);
             if (updateSignifier == 0)
             {
+                //if there is an available session, then goto gameplay scene
                 gameManager.GetComponent<GameSystemManager>().ChangeGameStates(GameStates.PlayingTicTacToe);
             }
             else if (updateSignifier == 1)
@@ -146,12 +148,14 @@ public class NetworkedClient : MonoBehaviour
                 int pos = int.Parse(csv[2]);
                 int mark = int.Parse(csv[3]);
 
+                //add chess moves to local chess list 
                 TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
                     .Add(new ChessBoardManager.PlayerChess(pos, mark));
             }
             else if (updateSignifier == 2)
             {
-                TicTacToeManager.GetComponent<ChessBoardManager>().BulkUpdate();
+                //go through the local chess list and update all buttons 
+                TicTacToeManager.GetComponent<ChessBoardManager>().BulkChessVisualUpdate();
             }
         }
         else if (signifier == ServerToClientSignifiers.updateSpectator)
@@ -160,12 +164,16 @@ public class NetworkedClient : MonoBehaviour
         }
         else if (signifier == ServerToClientSignifiers.announceWinner)
         {
+            //update result UI text
             gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "Player" + csv[1] + " wins!";
+            //show replay button
             gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
         }
         else if (signifier == ServerToClientSignifiers.announceDraw)
         {
+            //update result UI text
             gameManager.GetComponent<GameSystemManager>().resultText.GetComponent<Text>().text = "It's a tie!";
+            //show replay button
             gameManager.GetComponent<GameSystemManager>().replayButton.SetActive(true);
         }
         else if (signifier == ServerToClientSignifiers.sendReplayChessList)
@@ -174,15 +182,18 @@ public class NetworkedClient : MonoBehaviour
 
             if (updateSignifier == 0)
             {
+                //remove all elements in the chess list
                 TicTacToeManager.GetComponent<ChessBoardManager>().chesslist.Clear();
+                //reset all buttons on chess board
                 TicTacToeManager.GetComponent<ChessBoardManager>().ResetAllButtons();
             }
-
+            
             if (updateSignifier == 1)
             {
                 int pos = int.Parse(csv[2]);
                 int mark = int.Parse(csv[3]);
                 
+                //add all chess info to local chesslist
                 TicTacToeManager.GetComponent<ChessBoardManager>().chesslist
                     .Add(new ChessBoardManager.PlayerChess(pos, mark));
             }
@@ -190,7 +201,9 @@ public class NetworkedClient : MonoBehaviour
             if (updateSignifier == 2)
             {
                 Debug.Log("List length " + TicTacToeManager.GetComponent<ChessBoardManager>().chesslist.Count);
-                TicTacToeManager.GetComponent<ChessBoardManager>().canReplay = true;
+                
+                //notify client that all chess info have been sent 
+                TicTacToeManager.GetComponent<ChessBoardManager>().CanReplay = true;
             }
         }
     }

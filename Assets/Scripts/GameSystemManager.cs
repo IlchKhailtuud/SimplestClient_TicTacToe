@@ -10,8 +10,8 @@ public class GameSystemManager : MonoBehaviour
     GameObject networkedClient;
     GameObject findGameSessionButton;
     public GameObject replayButton,  resultText;
-    [SerializeField] private GameObject messageDisplay;
-    [SerializeField]GameObject TicTacToe;
+    public GameObject messageDisplay;
+    public GameObject TicTacToe;
 
     void Start()
     {
@@ -145,29 +145,7 @@ public class GameSystemManager : MonoBehaviour
         public const int watchGame = 9;
         public const int requestReplay = 10;
     }
-
-    public static class ServerToClientSignifiers
-    {
-        public const int LoginResponse = 1;
-        public const int GameSessionStarted = 2;
-        public const int OpponentTicTacToePlay = 3;
-        public const int DisplayReceivedMsg = 4;
-        public const int DecideTurnOrder = 5;
-        public const int spectatorJoin = 6;
-        public const int updateSpectator = 7;
-        public const int announceWinner = 8;
-        public const int announceDraw = 9;
-        public const int sendReplayChessList = 10;
-    }
- 
-    public static class LoginResponses
-    {
-        public const int Success = 1;
-        public const int FailureNameInUse = 2;
-        public const int FailureNameNotFound = 3;
-        public const int FailureIncorrectPassword = 4; 
-    }
-
+    
     public static class GameStates
     {
         public const int login = 1;
