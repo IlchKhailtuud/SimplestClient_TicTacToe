@@ -16,7 +16,7 @@ public class ChessBoardManager : MonoBehaviour
     private int[] chessbordArr;
     
     //list for containing both player's chess info
-    public List<PlayerChess> chesslist;
+    private List<PlayerChess> chesslist;
     
     private int playerID;
     private int chessMark;
@@ -26,7 +26,7 @@ public class ChessBoardManager : MonoBehaviour
     private float passedTime;
     private float targetTime;
     private int listIndex;
-    private NetworkedClient networkedClient;
+    //private NetworkedClient networkedClient;
     
     //properties for chessbordPos
     public int[] ChessbordPos
@@ -69,17 +69,24 @@ public class ChessBoardManager : MonoBehaviour
         set => canReplay = value;
     }
     
+    //properties for chesslist
+    public List<PlayerChess> Chesslist
+    {
+        get => chesslist;
+        set => chesslist = value;
+    }
+    
+    private void OnEnable()
+    {
+        //networkedClient = FindObjectOfType<NetworkedClient>();
+    }
+
     //singleton for Chessboard manager
     private void Awake()
     {
         instance = this;
     }
-
-    private void OnEnable()
-    {
-        networkedClient = FindObjectOfType<NetworkedClient>();
-    }
-
+    
     void Start()
     {
         chessbordArr = new int [9];
@@ -106,17 +113,17 @@ public class ChessBoardManager : MonoBehaviour
         canPlay = false;
 
         //send playerAction signifier to server
-        networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerAction + "," + index + "," + chessMark);
+        NetworkedClientProcessing.SendMessageToServer(ClientToServerSignifiers.playerAction + "," + index + "," + chessMark);
         
-        if (isWin())
+        if (IsWin())
         {
             //send playerWin signifier to server
-            networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.playerWin + "," + playerID);
+            NetworkedClientProcessing.SendMessageToServer(ClientToServerSignifiers.playerWin + "," + playerID);
         }
         else if (chessPlaced >= 9)
         {
             //if chessplaced is greater than 9 && the player doesn't win then send isDraw signifier to server
-            networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.isDraw + "");
+            NetworkedClientProcessing.SendMessageToServer(ClientToServerSignifiers.isDraw + "");
         }
     }
 
@@ -185,7 +192,7 @@ public class ChessBoardManager : MonoBehaviour
     }
     
     //win condition check
-    public bool isWin()
+    public bool IsWin()
     {
         if ((chessbordArr[0] == playerID && chessbordArr[1] == playerID && chessbordArr[2] == playerID)
             || (chessbordArr[3] == playerID && chessbordArr[4] == playerID && chessbordArr[5] == playerID)

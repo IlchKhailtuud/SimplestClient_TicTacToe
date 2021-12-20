@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -6,6 +7,13 @@ using UnityEngine.UI;
 
 public class GameSystemManager : MonoBehaviour
 {
+    public static GameSystemManager instance;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     GameObject inputFieldUserName, inputFieldPassword, buttonSubmit, toggleLogin, toggleCreate, spectatorJoin;
     GameObject networkedClient;
     GameObject findGameSessionButton;
@@ -61,10 +69,10 @@ public class GameSystemManager : MonoBehaviour
 
         if (toggleLogin.GetComponent<Toggle>().isOn)
             networkedClient.GetComponent<NetworkedClient>()
-                .SendMessageToHost(ClientToServerSignifiers.Login + "," + n + "," + p);
+                .SendMessageToServer(ClientToServerSignifiers.Login + "," + n + "," + p);
         else
             networkedClient.GetComponent<NetworkedClient>()
-                .SendMessageToHost(ClientToServerSignifiers.CreateAccount + "," + n + "," + p);
+                .SendMessageToServer(ClientToServerSignifiers.CreateAccount + "," + n + "," + p);
     }
     
     private void ToggleCreateValueChanged(bool newValue)
@@ -79,23 +87,23 @@ public class GameSystemManager : MonoBehaviour
     
     private void FindGameSessionButtonPressed()
     {
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AddToGameSessionQueue + "");
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToServer(ClientToServerSignifiers.AddToGameSessionQueue + "");
         ChangeGameStates(GameStates.WaitingForMatch);
     }
 
     private void SpectatorJoinButtonPressed()
     {
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.watchGame + "");
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToServer(ClientToServerSignifiers.watchGame + "");
     }
 
     public void ReplayButtonPressed()
     {
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.requestReplay + "");
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToServer(ClientToServerSignifiers.requestReplay + "");
     }
 
     public void ExitButtonPressed()
     {
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.startNewSession + "");
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToServer(ClientToServerSignifiers.startNewSession + "");
         ChangeGameStates(GameStates.MainMenu);
         ChessBoardManager.instance.Reset();
         //Application.Quit();

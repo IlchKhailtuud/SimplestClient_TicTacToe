@@ -20,7 +20,7 @@ public class UserMessageBehaviour : MonoBehaviour
    {
       if (userInputField.text != null)
       {
-         networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.sendMessage + "," + userInputField.text);
+         networkedClient.SendMessageToServer(ClientToServerSignifiers.sendMessage + "," + userInputField.text);
          Debug.Log("userInputField.text)");
       }
    }

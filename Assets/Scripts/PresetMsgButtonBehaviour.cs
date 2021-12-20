@@ -18,6 +18,6 @@ public class PresetMsgButtonBehaviour : MonoBehaviour
 
     public void SendMessage()
     {
-        networkedClient.SendMessageToHost(NetworkedClient.ClientToServerSignifiers.sendMessage + "," + message);
+        networkedClient.SendMessageToServer(ClientToServerSignifiers.sendMessage + "," + message);
     }
 }
