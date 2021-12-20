@@ -8,11 +8,9 @@ public class UserMessageBehaviour : MonoBehaviour
 {
    [SerializeField ]private InputField userInputField;
    [SerializeField ]private Button sendButton;
-   private NetworkedClient networkedClient;
 
    private void Start()
    {
-      networkedClient = FindObjectOfType<NetworkedClient>();
       sendButton.onClick.AddListener(SendUserMessage);
    }
 
@@ -20,7 +18,7 @@ public class UserMessageBehaviour : MonoBehaviour
    {
       if (userInputField.text != null)
       {
-         networkedClient.SendMessageToServer(ClientToServerSignifiers.sendMessage + "," + userInputField.text);
+         NetworkedClientProcessing.SendMessageToServer(ClientToServerSignifiers.sendMessage + "," + userInputField.text);
          Debug.Log("userInputField.text)");
       }
    }

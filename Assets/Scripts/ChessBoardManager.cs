@@ -26,8 +26,7 @@ public class ChessBoardManager : MonoBehaviour
     private float passedTime;
     private float targetTime;
     private int listIndex;
-    //private NetworkedClient networkedClient;
-    
+
     //properties for chessbordPos
     public int[] ChessbordPos
     {

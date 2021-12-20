@@ -98,9 +98,9 @@ public static class NetworkedClientProcessing
         }
         else if (signifier == ServerToClientSignifiers.sendReplayChessList)
         {
-            int updateSignifier = int.Parse(csv[1]);
+            int dataTransferSignifier = int.Parse(csv[1]);
 
-            if (updateSignifier == 0)
+            if (dataTransferSignifier == 0)
             {
                 //remove all elements in the chess list
                 ChessBoardManager.instance.Chesslist.Clear();
@@ -108,7 +108,7 @@ public static class NetworkedClientProcessing
                 ChessBoardManager.instance.ResetAllButtonSprite();
             }
             
-            if (updateSignifier == 1)
+            if (dataTransferSignifier == 1)
             {
                 int pos = int.Parse(csv[2]);
                 int mark = int.Parse(csv[3]);
@@ -118,10 +118,8 @@ public static class NetworkedClientProcessing
                     .Add(new ChessBoardManager.PlayerChess(pos, mark));
             }
             
-            if (updateSignifier == 2)
+            if (dataTransferSignifier == 2)
             {
-                //Debug.Log("List length " + ChessBoardManager.instance.Chesslist.Count);
-                
                 //notify client that all chess info have been sent 
                 ChessBoardManager.instance.CanReplay = true;
             }

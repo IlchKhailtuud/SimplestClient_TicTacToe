@@ -58,7 +58,7 @@ public class GameSystemManager : MonoBehaviour
         spectatorJoin.GetComponent<Button>().onClick.AddListener(SpectatorJoinButtonPressed);
         replayButton.GetComponent<Button>().onClick.AddListener(ReplayButtonPressed);
         exitButton.GetComponent<Button>().onClick.AddListener(ExitButtonPressed);
-
+        
         ChangeGameStates(GameStates.login);
     }
     
@@ -106,7 +106,6 @@ public class GameSystemManager : MonoBehaviour
         networkedClient.GetComponent<NetworkedClient>().SendMessageToServer(ClientToServerSignifiers.startNewSession + "");
         ChangeGameStates(GameStates.MainMenu);
         ChessBoardManager.instance.Reset();
-        //Application.Quit();
     }
 
     public void ChangeGameStates(int newState)
